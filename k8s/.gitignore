@@ -1,0 +1,4 @@
+*.draft
+*.*.draft
+token.txt
+values-draft.yml

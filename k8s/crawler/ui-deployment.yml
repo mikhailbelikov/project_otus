@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: # Блок метаданных деплоя
+  name: ui
+  labels:
+    app: search_engine
+    component: ui
+spec: # Блок спецификации деплоя
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: search_engine
+      component: ui
+  template: # Блок описания POD-ов
+    metadata:
+      name: ui-pod
+      annotations:
+        prometheus.io/port: "8000"
+        prometheus.io/scrape: "true"
+      labels:
+        app: search_engine
+        component: ui
+    spec:
+      containers:
+      - image: mikhailbelikov/crawler-ui:1.0
+        imagePullPolicy: Always
+        name: ui
+        ports:
+          - containerPort: 8000
+            name: ui
+            protocol: TCP
+        env:
+        - name: MONGO
+          value: mongo
+        - name: MONGO_PORT
+          value: "27017"
+          
